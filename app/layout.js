@@ -1,7 +1,7 @@
 import "@/app/globals.css";
 import { Inter as FontSans } from "next/font/google";
-
 import { cn } from "@/lib/utils";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -23,6 +23,7 @@ export default function RootLayout({ children }) {
         )}
       >
         {children}
+        <TailwindIndicator />
       </body>
     </html>
   );
