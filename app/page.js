@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Markets from "@/components/markets";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
+  const [price, setPrice] = useState("");
+  const [marketCap, setMarketCap] = useState(0);
 
   useEffect(() => {
     const getMarketData = async () => {
@@ -14,8 +17,17 @@ export default function Home() {
           throw new Error(`Error: ${res.status}`);
         }
 
-        const marketData = await res.json();
-        console.log(marketData);
+        const { marketData } = await res.json();
+
+        setPrice(
+          marketData.data[1].quote.USD.price.toLocaleString("en-US", {
+            style: "currency",
+            currency: "USD",
+          }),
+        );
+        setMarketCap(
+          formatLargeNumber(marketData.data[1].quote.USD.market_cap),
+        );
       } catch (err) {
         console.error(err);
       } finally {
@@ -25,6 +37,15 @@ export default function Home() {
 
     getMarketData();
   }, []);
+
+  function formatLargeNumber(value) {
+    return new Intl.NumberFormat("en-US", {
+      notation: "compact",
+      compactDisplay: "short",
+      currency: "USD",
+      maximumFractionDigits: 2,
+    }).format(value);
+  }
   return (
     <main>
       {loading ? (
@@ -32,7 +53,7 @@ export default function Home() {
           <div role="status">
             <svg
               aria-hidden="true"
-              class="w-6 h-6 text-gray-200 animate-spin text-gray-600 fill-white"
+              className="w-6 h-6 text-gray-200 animate-spin text-gray-600 fill-white"
               viewBox="0 0 100 101"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -46,12 +67,14 @@ export default function Home() {
                 fill="currentFill"
               />
             </svg>
-            <span class="sr-only">Loading...</span>
+            <span className="sr-only">Loading...</span>
           </div>
           <div className="text-sm">Loading data...</div>
         </div>
       ) : (
-        <div></div>
+        <div>
+          <Markets price={price} marketCap={marketCap} />
+        </div>
       )}
     </main>
   );
