@@ -2,9 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Markets from "@/components/markets";
+import Footer from "@/components/footer";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
+  const [systemMessage, setSystemMessage] = useState("");
+  const [systemColor, setSystemColor] = useState("");
+
   const [price, setPrice] = useState(0);
   const [satsPerDollar, setSatsPerDollar] = useState(0);
   const [marketCap, setMarketCap] = useState(0);
@@ -15,7 +19,10 @@ export default function Home() {
         const res = await fetch(`/api/getMarketData`);
 
         if (!res.ok) {
+          setSystemMessage("Systems degraded");
+          setSystemColor("text-red-500");
           throw new Error(`Error: ${res.status}`);
+          return;
         }
 
         const { marketData } = await res.json();
@@ -30,8 +37,13 @@ export default function Home() {
         setMarketCap(
           formatLargeNumber(marketData.data[1].quote.USD.market_cap),
         );
+
+        setSystemMessage("All systems normal");
+        setSystemColor("text-green-600");
       } catch (err) {
         console.error(err);
+        setSystemMessage("Systems degraded");
+        setSystemColor("text-red-500");
       } finally {
         setLoading(false);
       }
@@ -81,13 +93,16 @@ export default function Home() {
           <div className="text-sm">Loading data...</div>
         </div>
       ) : (
-        <div>
-          <Markets
-            price={price}
-            satsPerDollar={satsPerDollar}
-            marketCap={marketCap}
-          />
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-8 gap-4">
+            <Markets
+              price={price}
+              satsPerDollar={satsPerDollar}
+              marketCap={marketCap}
+            />
+          </div>
+          <Footer systemMessage={systemMessage} systemColor={systemColor} />
+        </>
       )}
     </main>
   );
