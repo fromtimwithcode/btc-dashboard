@@ -7,7 +7,11 @@ import {
 } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
-export default function Markets({ price = 0, marketCap = 0 }) {
+export default function Markets({
+  price = 0,
+  satsPerDollar = 0,
+  marketCap = 0,
+}) {
   return (
     <Card className="xl:col-span-2">
       <CardHeader className="flex flex-row items-center">
@@ -25,6 +29,14 @@ export default function Markets({ price = 0, marketCap = 0 }) {
               </TableCell>
               <TableCell className="text-right text-muted-foreground">
                 {price}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <div className="font-medium">Sats Per Dollar</div>
+              </TableCell>
+              <TableCell className="text-right text-muted-foreground">
+                {satsPerDollar}
               </TableCell>
             </TableRow>
             <TableRow>

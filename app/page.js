@@ -5,7 +5,8 @@ import Markets from "@/components/markets";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
+  const [satsPerDollar, setSatsPerDollar] = useState(0);
   const [marketCap, setMarketCap] = useState(0);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ export default function Home() {
             currency: "USD",
           }),
         );
+        setSatsPerDollar(getSatsPerDollar(marketData.data[1].quote.USD.price));
         setMarketCap(
           formatLargeNumber(marketData.data[1].quote.USD.market_cap),
         );
@@ -37,6 +39,12 @@ export default function Home() {
 
     getMarketData();
   }, []);
+
+  function getSatsPerDollar(bitcoinPrice) {
+    const satsPerBitcoin = 100_000_000; // 1 Bitcoin = 100,000,000 satoshis
+    const satsPerDollar = satsPerBitcoin / bitcoinPrice;
+    return satsPerDollar.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  }
 
   function formatLargeNumber(value) {
     return new Intl.NumberFormat("en-US", {
@@ -74,7 +82,11 @@ export default function Home() {
         </div>
       ) : (
         <div>
-          <Markets price={price} marketCap={marketCap} />
+          <Markets
+            price={price}
+            satsPerDollar={satsPerDollar}
+            marketCap={marketCap}
+          />
         </div>
       )}
     </main>
