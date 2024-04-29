@@ -44,6 +44,7 @@ export default function Home() {
       compactDisplay: "short",
       currency: "USD",
       maximumFractionDigits: 2,
+      style: "currency",
     }).format(value);
   }
   return (
