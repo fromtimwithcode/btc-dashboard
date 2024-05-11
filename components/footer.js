@@ -14,13 +14,13 @@ export default function Footer({ systemMessage, systemColor }) {
         <span aria-hidden="true">{systemMessage}</span>
       </div>
       <div>
-        By{" "}
+        by{" "}
         <Link
           href="https://www.timbothe.dev"
           target="_blank"
           className="text-primary sm:hover:text-primary/80"
         >
-          timbothe.dev
+          timbo
         </Link>
       </div>
     </div>

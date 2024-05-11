@@ -19,7 +19,7 @@ export default function Home() {
         const res = await fetch(`/api/getMarketData`);
 
         if (!res.ok) {
-          setSystemMessage("Systems degraded");
+          setSystemMessage("error connecting");
           setSystemColor("text-red-500");
           throw new Error(`Error: ${res.status}`);
           return;
@@ -38,11 +38,11 @@ export default function Home() {
           formatLargeNumber(marketData.data[1].quote.USD.market_cap),
         );
 
-        setSystemMessage("All systems normal");
+        setSystemMessage("connected");
         setSystemColor("text-green-600");
       } catch (err) {
         console.error(err);
-        setSystemMessage("Systems degraded");
+        setSystemMessage("error connecting");
         setSystemColor("text-red-500");
       } finally {
         setLoading(false);
