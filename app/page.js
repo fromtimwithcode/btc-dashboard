@@ -29,6 +29,7 @@ export default function Home() {
         return;
       }
       const { marketData } = await res.json();
+      console.log(marketData);
       setPrice(
         marketData.data[1].quote.USD.price.toLocaleString("en-US", {
           style: "currency",
